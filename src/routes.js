@@ -6,6 +6,7 @@ const RecoverPassword = require('./controllers/RecoverPassController');
 
 routes.post('/sessions', SessionController.create);
 
+routes.get('/users/', UserController.index);
 routes.get('/users/:id', UserController.show);
 routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
