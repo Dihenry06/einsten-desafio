@@ -5,14 +5,15 @@ exports.up = function (knex) {
         table.string('first_name', 100).notNullable();
         table.string('last_name', 100).notNullable();
         table.string('date_birth', 100).notNullable();
-        table.bigInteger('cpf').notNullable();
+        table.bigInteger('cpf').notNullable().unique();
         table.string('email', 200).notNullable().unique();
         table.string('cep').notNullable();
-        table.string('address', 200).notNullable().unique()
+        table.string('address', 200).notNullable();
         table.integer('number').notNullable();
         table.string('city').notNullable();
         table.string('state').notNullable();
         table.string('password').notNullable();
+        table.string('image');
 
         table.timestamps();
     });
