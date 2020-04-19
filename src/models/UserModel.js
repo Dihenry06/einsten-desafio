@@ -46,8 +46,7 @@ module.exports = {
             number,
             city,
             state,
-            "password": hash,
-            created_at: new Date()
+            password: hash,
         });
 
         return true;
@@ -83,8 +82,7 @@ module.exports = {
                 number,
                 city,
                 state,
-                password: hash,
-                updated_at: new Date()
+                password: hash
             });
 
         return response;
