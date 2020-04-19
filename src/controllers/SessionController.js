@@ -6,9 +6,14 @@ module.exports = {
         const { email, password } = req.body;
 
         const user = await SessionModel.create(email);
+
+        if(!user){
+            return res.status(404).json({error: "no user found with this email or password."});
+        }
+        
         const comparePassword = await passwordCript.comparePassword(password, user.password);
 
-        if(!user || !comparePassword){
+        if( !comparePassword){
             return res.status(404).json({error: "no user found with this email or password."});
         }
 
