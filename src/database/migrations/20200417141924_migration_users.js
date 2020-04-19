@@ -15,7 +15,7 @@ exports.up = function (knex) {
         table.string('password').notNullable();
         table.string('image');
 
-        table.timestamps();
+        table.timestamp('created_at').defaultTo(knex.fn.now());
     });
 };
 
