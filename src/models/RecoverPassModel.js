@@ -19,7 +19,6 @@ module.exports = {
             .where('id', id)
             .update({
                 password: password,
-                updated_at: new Date()
             });
 
         return response;
