@@ -55,4 +55,14 @@ module.exports = {
 
     },
 
+    async listSchedule(req, res) {
+        const id = req.headers.authorization;
+        const response = await DoctorsModel.listSchedule(id);
+
+        if (!response) {
+            return res.status(400).json({ error: 'error listing schedule' });
+        }
+        return res.status(200).json(response);
+    }
+
 }

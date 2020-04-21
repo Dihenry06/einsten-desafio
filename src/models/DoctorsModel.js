@@ -48,4 +48,19 @@ module.exports = {
 
     },
 
+    async listSchedule(id) {
+        const response = await connection('schedules')
+            .join('users', 'users.id', '=', 'schedules.user_id')
+            .join('doctors', 'doctors.id', '=', 'schedules.doctor_id')
+            .select([
+                'users.first_name as patient',
+                'doctors.first_name as doctor',
+                'hour',
+                'date'
+            ])
+            .where('doctor_id',id);
+
+        return response;
+    }
+
 }
