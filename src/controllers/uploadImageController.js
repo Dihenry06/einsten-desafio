@@ -5,7 +5,6 @@ module.exports = {
     async storeNameImage(req, res) {
         const { path } = req.file;
         const { id } = req.body;
-        console.log(req.file);
 
         const response = await UploadImageModel.storeImageLocation(path, id)
 
