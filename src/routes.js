@@ -28,8 +28,6 @@ const upload = multer({ storage });
 /**
  * Route session
  */
-
-//pronto
 routes.post('/sessions', celebrate({
     [Segments.BODY]: Joi.object().keys({
         email: Joi.string().required().email(),
@@ -40,7 +38,6 @@ routes.post('/sessions', celebrate({
  * Route upload images
  */
 
-//pronto
 routes.post('/image', upload.single('image'), celebrate({
     [Segments.BODY]: Joi.object().keys({
         id: Joi.number().required(),
@@ -50,15 +47,15 @@ routes.post('/image', upload.single('image'), celebrate({
 /**
  * Routes Users
  */
-
-//pronto
-routes.get('/users', celebrate({
+routes.get('/users/:filter', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.string().required()
-    }).unknown()
+    }).unknown(),
+    [Segments.PARAMS] : Joi.object().keys({
+        filter : Joi.string(),
+    })
 }), UserController.index);
 
-//pronto
 routes.post('/users', celebrate({
     [Segments.BODY]: Joi.object().keys({
         first_name: Joi.string().required(),
@@ -75,7 +72,7 @@ routes.post('/users', celebrate({
         type: Joi.string().required()
     })
 }), UserController.store);
-//pronto
+
 routes.put('/users', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.number().required()
@@ -95,14 +92,13 @@ routes.put('/users', celebrate({
     })
 }), UserController.update);
 
-//pronto
 routes.post('/users/recover', celebrate({
     [Segments.BODY]: Joi.object().keys({
         email: Joi.string().required().email(),
         cpf: Joi.number().required()
     })
 }), RecoverPassController.recoverPassword);
-//pronto
+
 routes.put('/users/schedule', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.number().required()
@@ -113,7 +109,7 @@ routes.put('/users/schedule', celebrate({
         date: Joi.string().required()
     })
 }), UserController.alterSchedule);
-//pronto
+
 routes.delete('/users/schedule', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.number().required()
@@ -127,31 +123,53 @@ routes.delete('/users/schedule', celebrate({
 /**
  * Routes Doctors
  */
-//pronto
 routes.get('/doctor-schedule', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.number().required()
     }).unknown()
 }), DoctorsController.listSchedule);
-//pronto
+
 routes.delete('/doctor-schedule', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.number().required()
     }).unknown(),
-    [Segments.BODY] : Joi.object().keys({
-        doctor_id : Joi.number().required()
+    [Segments.BODY]: Joi.object().keys({
+        doctor_id: Joi.number().required()
     })
 }), DoctorsController.deleteSchedule);
 
 /**
- * Routes Schedules
+ * Routes secretary
  */
-//pronto
-routes.get('/schedules', celebrate({
+routes.put('/secretary-schedule', celebrate({
     [Segments.HEADERS]: Joi.object({
         authorization: Joi.string().required()
-    }).unknown()
-}), SchedulesController.index);
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        id: Joi.number().required(),
+        doctor_id: Joi.number().required(),
+        hour : Joi.string().required(),
+        date : Joi.string().required()
+    })
+}), SecretariatsController.alterSchedule);
+
+routes.delete('/secretary-schedule',celebrate({
+    [Segments.HEADERS]: Joi.object({
+        authorization: Joi.string().required()
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        id: Joi.number().required(),
+    })
+}),SecretariatsController.deleteSchedule);
+
+routes.get('/secretary-schedules-doctors/:name', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        authorization: Joi.string().required()
+    }).unknown(),
+    [Segments.PARAMS] : Joi.object().keys({
+        name : Joi.string()
+    })
+}), SecretaryActionsController.listAllSchedules);
 
 routes.get('/schedules/:date/:hour', celebrate({
     [Segments.PARAMS]: Joi.object().keys({
@@ -160,6 +178,9 @@ routes.get('/schedules/:date/:hour', celebrate({
     })
 }), SecretaryActionsController.listSchedulesDateHour);
 
+/**
+ * Routes Schedule
+ */
 routes.post('/schedules', celebrate({
     [Segments.BODY]: Joi.object().keys({
         user_id: Joi.number().required(),
@@ -168,26 +189,5 @@ routes.post('/schedules', celebrate({
         date: Joi.string().required()
     })
 }), SchedulesController.store);
-
-routes.put('/schedules', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        authorization: Joi.number().required()
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        doctor_id: Joi.number().required(),
-        hour: Joi.string().required(),
-        date: Joi.string().required()
-    })
-}), SchedulesController.update);
-
-routes.delete('/schedules', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        authorization: Joi.number().required()
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        user_id: Joi.number().required(),
-    })
-}), SchedulesController.delete);
-
 
 module.exports = routes;

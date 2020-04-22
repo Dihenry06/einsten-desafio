@@ -9,7 +9,7 @@ exports.up = function(knex) {
         table.date('date').notNullable();
 
         table.foreign('user_id').references('id').inTable('users');
-        table.foreign('doctor_id').references('id').inTable('doctors');
+        table.foreign('doctor_id').references('id').inTable('users');
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
     });

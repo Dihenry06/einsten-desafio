@@ -10,9 +10,10 @@ module.exports = {
         if (accontType !== 'secretary') {
             return res.status(400).json({ error: 'permission denied' })
         }
+        const {filter} = req.params;
 
-        const users = await UserModel.index();
-        return res.json(users);
+        const users = await UserModel.index(filter);
+        return res.status(200).json(users);
     },
 
     async show(req, res) {
@@ -132,7 +133,9 @@ module.exports = {
 
         const response = await UserModel.alterSchedule(data);
 
-        if (!response) return;
+        if (!response) {
+            return res.status(400).json({error:'error updating schedule'});
+        }
 
         return res.status(200).json({ success: 'updating schedule' });
     },

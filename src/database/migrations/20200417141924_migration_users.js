@@ -14,6 +14,7 @@ exports.up = function (knex) {
         table.string('state').notNullable();
         table.string('password').notNullable();
         table.string('image');
+        table.enu('type',['user','doctor','secretary']).notNullable();
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
     });

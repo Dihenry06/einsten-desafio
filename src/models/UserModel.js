@@ -2,8 +2,14 @@ const connection = require('../database/connection');
 
 module.exports = {
 
-    async index() {
-        const users = await connection('users').select('*').where('type', 'user');
+    async index(filter) {
+
+        const users = await connection('users')
+        .select('*')
+        .where('type', 'user')
+        .where('cpf','like',`${filter}%`)
+        .orWhere('email' , 'like' ,`${filter}%`);
+
         return users;
     },
 

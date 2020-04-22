@@ -26,7 +26,8 @@ describe('User', () => {
                 number: 25,
                 city: "São Paulo",
                 state: "São Paulo",
-                password: "TestIntegration"
+                password: "TestIntegration",
+                type: "user"
             });
 
         console.log(response.body);

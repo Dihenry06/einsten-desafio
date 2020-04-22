@@ -2,21 +2,28 @@ const connection = require('../database/connection');
 
 module.exports = {
 
-    async show() {
+    async alterSchedule(data) {
 
+        const { id, doctor_id, hour, date } = data;
+
+        const response = await connection('schedules')
+            .where('id', id)
+            .update({
+                doctor_id,
+                hour,
+                date
+            });
+
+        return response;
     },
 
-    async store(data) {
-        const { first_name, last_name, email, hash } = data;
+    async deleteSchedule(id){
 
-        await connection('secretariats').insert({
-            first_name,
-            last_name,
-            email,
-            password: hash,
-        });
+        const response = await connection('schedules')
+            .where('id', id)
+            .delete();
 
-        return true;
+        return response;
     }
 
 }
