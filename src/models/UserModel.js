@@ -3,19 +3,8 @@ const connection = require('../database/connection');
 module.exports = {
 
     async index() {
-        const users = await connection('users').select('*');
+        const users = await connection('users').select('*').where('type', 'user');
         return users;
-    },
-
-    async show(id) {
-
-        const user = await connection('users')
-            .select('*')
-            .where('id', id)
-            .first();
-
-        return user;
-
     },
 
     async store(data) {
@@ -31,7 +20,8 @@ module.exports = {
             number,
             city,
             state,
-            hash
+            hash,
+            type
 
         } = data;
 
@@ -47,6 +37,7 @@ module.exports = {
             city,
             state,
             password: hash,
+            type
         });
 
         return true;
@@ -88,5 +79,32 @@ module.exports = {
         return response;
 
     },
+
+    async alterSchedule(data) {
+        const { id, doctor_id, hour, date } = data;
+
+        const response = await connection('schedules')
+            .where('id', id)
+            .where('doctor_id', doctor_id)
+            .update({
+                hour,
+                date
+            });
+
+        return response;
+    },
+
+    async deleteSchedule(data) {
+        const { id, user_id, doctor_id } = data;
+
+        const response = await connection('schedules')
+            .where('id', id)
+            .where('user_id', user_id)
+            .where('doctor_id', doctor_id)
+            .delete();
+
+        return response;
+    }
+
 
 }
