@@ -3,62 +3,44 @@ const connection = require('../database/connection');
 module.exports = {
 
     async index() {
-        const doctors = await connection('doctors').select('*');
+        const doctors = await connection('users').select('*').where('type', 'doctor');
         return doctors;
     },
 
     async show(id) {
 
-        const doctor = await connection('doctors')
+        const doctor = await connection('users')
             .select('*')
             .where('id', id)
+            .where('type', 'doctor')
             .first();
 
         return doctor;
 
     },
 
-    async store(data) {
-
-        const { first_name, last_name, crm, hash } = data;
-
-        await connection('doctors').insert({
-            first_name,
-            last_name,
-            crm,
-            password: hash,
-        });
-
-        return true;
-    },
-
-    async update(data) {
-        const { id, first_name, last_name, crm, hash } = data;
-
-        const response = await connection('doctors')
-            .where('id', id)
-            .update({
-                first_name,
-                last_name,
-                crm,
-                password: hash
-            });
-
-        return response;
-
-    },
-
     async listSchedule(id) {
         const response = await connection('schedules')
             .join('users', 'users.id', '=', 'schedules.user_id')
-            .join('doctors', 'doctors.id', '=', 'schedules.doctor_id')
+            .join('users as doctor', 'doctor.id', '=', 'schedules.doctor_id')
             .select([
                 'users.first_name as patient',
-                'doctors.first_name as doctor',
+                'doctor.first_name as doctor',
                 'hour',
                 'date'
             ])
-            .where('doctor_id',id);
+            .where('doctor_id', id);
+
+        return response;
+    },
+
+    async deleteSchedule(data){
+        const { id, doctor_id } = data;
+
+        const response = await connection('schedules')
+            .where('id', id)
+            .where('doctor_id', doctor_id)
+            .delete();
 
         return response;
     }
