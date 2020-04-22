@@ -4,7 +4,7 @@ module.exports = {
     async create(email){
 
         const user = await connection('users')
-        .select('email','password')
+        .select('email','password','type')
         .where('email',email)
         .first();
 
