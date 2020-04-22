@@ -22,7 +22,7 @@ module.exports = {
             return res.json({ error: 'register cannot be updated' });
         }
 
-        await MailController.send(email, 'Nova Senha',newPassword)
+        await MailController.send(email, 'Nova Senha', newPassword);
         return res.status(200).json({ success: 'password changed' });
     },
 
